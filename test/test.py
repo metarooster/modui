@@ -11,4 +11,4 @@ def translate(text):
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 if __name__ == "__main__":
-    ui.Page(translate, model.config).launch()
+    ui.Page(translate, ["text"], ["text"], model.config).launch()
