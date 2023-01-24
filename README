@@ -44,4 +44,4 @@ modui.Page(fn=translate, config=model.config).launch()
 
 3. This sample will launch a local web server serving the generated page on [http://localhost:7860](http://localhost:7860/). Here is what it looks like in the web browser.
 
-![Sample screenshot](screenshot.jpg)
+![Sample screenshot](./images/sample_screenshot.jpg)
