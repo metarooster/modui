@@ -174,9 +174,9 @@ class Page():
             self.config.update({k:v})
 
         with g.Blocks() as form:
-            with g.Row(equal_height=True):
+            with g.Row():
                 g.Markdown("## Model UI 🚀")
-            with g.Row(equal_height=True):
+            with g.Row():
                 with g.Column(scale=5):
                     input_widget, output_widget = get_input_output_widgets()
                     with g.Row():
@@ -193,7 +193,7 @@ class Page():
 
                     # it's more visually pleasing to have all the dropdowns show up towards the bottom of the page
                     for k, v in self.controls.items():
-                        dropdown = get_dropdown_widget(k, v)
+                        widget = get_dropdown_widget(k, v)
                         if widget: add_widget(widget)
 
             submit_button.click(fn=self.fn, inputs=[input_widget], outputs=[output_widget])
