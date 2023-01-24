@@ -1,7 +1,7 @@
 import gradio as g
 
 from typing import Callable, List, Any
-from inspect import signature, isfunction, getmembers, getsource
+from inspect import isfunction, getmembers
 
 class Page():
     known_gtypes = ["text", "number", "bool"]
@@ -92,18 +92,30 @@ class Page():
                 fn_outputs = outputs
 
         # filter out special attributes and class instances, only deal with regular attributes with basic types
+        filters = kwargs.get('filters')
+
+        def is_filtered(name):
+            if not filters or type(filters) is not list: return False
+            return name not in filters
+
         def is_basic_type(v):
             t = type(v)
-            return t is int or t is float or t is str or t is bool
+            return t is int or (t is float and v > 0.001) or t is str or t is bool
 
         controls = {}
         members = getmembers(config)
         for member in members:
-            if not member[0].startswith("_") and is_basic_type(member[1]):
+            if not member[0].startswith("_") and is_basic_type(member[1]) and not is_filtered(member[0]):
                 controls[member[0]] = member[1]
 
-        if len(controls) == 0:
+        if not controls:
             raise ValueError('The config parameter has no controllable attribute.')
+
+        if 'model_type' in controls:
+            self.model_type = controls['model_type']
+            controls.pop('model_type')
+        else:
+            self.model_type = '(null)'
 
         self.fn = fn
         self.config = config
@@ -112,5 +124,79 @@ class Page():
         self.outputs = fn_outputs
 
     def launch(self):
-        for control in self.controls:
-            print(control)
+        """
+        Create a UI page based on the controllable config parameters and launch a local web server to serve it.
+        """
+        def get_input_output_widgets():
+            input = None
+            input_type = self.inputs[0]
+            if input_type == 'text':
+                input = g.Textbox(lines=20, label=self.fn.__code__.co_varnames[0])
+            elif input_type == 'number':
+                input = g.Number(label=self.fn.__code__.co_varnames[0])
+
+            output = None
+            output_type = self.outputs[0]
+            if output_type == 'text':
+                output = g.Textbox(lines=20, label=self.fn.__name__)
+            elif output_type == 'number':
+                output = g.Number(label=self.fn.__name__)
+            elif output_type == 'bool':
+                output = g.Checkbox(label=self.fn.__name__)
+
+            return input, output
+
+        def get_primary_widget(k, v):
+            t = type(v)
+            if t is float and v <= 1:
+                return g.Slider(value=v, minimum=0, maximum=1, label=k, interactive=True)
+            if t is float or t is int:
+                return g.Number(value=v, label=k, interactive=True)
+            if t is bool:
+                return g.Checkbox(value=v, label=k)
+            return None
+
+        def get_dropdown_widget(k, v):
+            t = type(v)
+            if t is str:
+                return g.Dropdown(choices=[v], value=v, label=k, interactive=True)
+            return None
+
+        widgets = []
+
+        def add_widget(widget):
+            def fn(v):
+                self.config.update({widget.label: v})
+            widget.change(fn=fn, inputs=[widget], outputs=[])
+            widgets.append(widget)
+
+        def update_config(k, v):
+            self.config.update({k:v})
+
+        with g.Blocks() as form:
+            with g.Row(equal_height=True):
+                g.Markdown("## Model UI 🚀")
+            with g.Row(equal_height=True):
+                with g.Column(scale=5):
+                    input_widget, output_widget = get_input_output_widgets()
+                    with g.Row():
+                        with g.Column(scale=1, min_width=100):
+                            submit_button = g.Button(value='Submit')
+                        with g.Column(scale=8):
+                            g.Button(visible=False)
+
+                with g.Column(scale=1, min_width=320):
+                    g.Dropdown(choices=[self.model_type], value=self.model_type, label='model_type', interactive=True)
+                    for k, v in self.controls.items():
+                        widget = get_primary_widget(k, v)
+                        if widget: add_widget(widget)
+
+                    # it's more visually pleasing to have all the dropdowns show up towards the bottom of the page
+                    for k, v in self.controls.items():
+                        dropdown = get_dropdown_widget(k, v)
+                        if widget: add_widget(widget)
+
+            submit_button.click(fn=self.fn, inputs=[input_widget], outputs=[output_widget])
+
+        form.launch()
+
