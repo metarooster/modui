@@ -123,7 +123,7 @@ class Page():
         self.inputs = fn_inputs
         self.outputs = fn_outputs
 
-    def launch(self):
+    def launch(self, share=False):
         """
         Create a UI page based on the controllable config parameters and launch a local web server to serve it.
         """
@@ -198,5 +198,5 @@ class Page():
 
             submit_button.click(fn=self.fn, inputs=[input_widget], outputs=[output_widget])
 
-        form.launch()
+        form.launch(share)
 
