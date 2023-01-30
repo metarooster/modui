@@ -1,8 +1,8 @@
 # Model UI
 
-Model UI builds a Web UI page from a configuration via type inspection. It automatically updates the configuration whenever the corresponding UI widget is updated by the user. It then calls back to the specified user function whenever the Submit button on the generated page is clicked. The generated Web UI is launched via a local web server.
+MModel UI builds a Web UI page from a configuration via type inspection. It automatically updates the configuration whenever the corresponding UI widget is updated by the user. It then calls back to the specified user function whenever the Submit button on the generated page is clicked. The generated Web UI can be launched locally via a local web server or hosted temporarily in a public URL (handy for when it's run from a repl).
 
-It can be used for testing the ML models you're working on, or demoing to interested parties. Under the hood, it leverages Gradio for UI construction and web server integration. 
+It can be used to locally test the ML models you're working on, or to demo them to an interested party. Under the hood, it leverages Gradio for UI construction and web server integration. 
 
 ## Sample
 

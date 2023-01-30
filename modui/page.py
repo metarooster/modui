@@ -198,5 +198,5 @@ class Page():
 
             submit_button.click(fn=self.fn, inputs=[input_widget], outputs=[output_widget])
 
-        form.launch(share)
+        form.launch(share=share)
 
