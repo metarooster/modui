@@ -1,26 +1,28 @@
-# Model UI
+# Model Auto UI
 
-MModel UI builds a Web UI page from a configuration via type inspection. It automatically updates the configuration whenever the corresponding UI widget is updated by the user. It then calls back to the specified user function whenever the Submit button on the generated page is clicked. The generated Web UI can be launched locally via a local web server or hosted temporarily in a public URL (handy for when it's run from a repl).
+Model Auto UI (`modui`) is a Python library that builds a Web UI page from a configuration via type inspection. It automatically updates the configuration whenever the corresponding UI widget is updated by the user. It then calls back to the specified user function whenever the Submit button on the generated page is clicked. The generated Web UI can be launched locally via a local web server or hosted temporarily in a public URL (handy for when it's run from a repl).
 
-It can be used to locally test the ML models you're working on, or to demo them to an interested party. Under the hood, it leverages Gradio for UI construction and web server integration. 
+It can be used to locally test an ML model in Python, or to demo them to an interested party. Under the hood, it leverages Gradio for UI construction and web server integration.
+
+This project is inspired by Nat Friedman's Replit Bounty [Playground for local models](https://replit.com/bounties/@natfriedman/openai-playground-fo). We'll try to stick with the feature set as envisioned by Nat, but may deviate when necessary.
 
 ## Sample
 
-**Prerequisite**: Model UI requires Gradio 3.16 and Python 3.7 or above.
+**Prerequisite**: Requires Gradio 3.16 and Python 3.7 or above.
 
 ### Hello, Transformers ⚡
 
-To launch a Model UI for "T5-small", one of the HuggingFace Transformer models
+To launch a UI for "T5-small", one of the HuggingFace Transformer models
 
-1. Install Gradio from pip. Note, the minimal supported Python version is 3.7.
+1. Install Model Auto UI from pip. Note, the minimal supported Python version is 3.7.
 
 ```bash
-pip install gradio 
+pip install modui 
 ```
 
-2. Run the code below as a Python script. Only the first and last line are related to Model UI. In the middle, it's whatever code you're testing with. In this sample, it's the code necessary to run the "t5-small" model.
+2. Run the code below as a Python script. Notice the first and the last line in the sample. Those are the two relevant lines, everything else in the middle is whatever code you're testing with. In this sample, it's the code necessary to run the "t5-small" model.
 
-The `translate` function is the callback you give to Model UI. It will be called when the Submit button on the generated page is clicked. 
+The `translate` function is the callback you give to Model Auto UI. It will be called when the Submit button on the generated page is clicked. 
 
 The `model.config` is the model configuration with a bunch of properties. Each of these properties corresponds one-to-one to a UI widget on the page.
 
@@ -42,6 +44,9 @@ def translate(text: str) -> str:
 modui.Page(fn=translate, config=model.config).launch()
 ```
 
-3. This sample will launch a local web server serving the generated page on [http://localhost:7860](http://localhost:7860/). Here is what it looks like in the web browser.
+3. This sample will launch a local web server serving the generated page on [http://localhost:7860](http://localhost:7860/). Setting the `share=True` parameter on the `launch()` call will temporarily host the URL in a public share, useful when the UI is launched from a remote machine e.g. when sharing out a UI to others or running it inside a Repl, etc. Here is what the generated UI should look like in a web browser.
 
 ![Sample screenshot](./images/sample_screenshot.jpg)
+
+Sent from Mail for Windows
+
