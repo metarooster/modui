@@ -10,5 +10,5 @@ def translate(text: str) -> str:
     outputs = model.generate(input_ids, max_new_tokens=512)
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-if __name__ == "__main__":
-    modui.Page(translate, model.config).launch()
+modui.Page(translate, model.config).launch()
+    
