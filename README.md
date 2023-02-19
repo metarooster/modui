@@ -28,9 +28,8 @@ The `model.config` is the model configuration with a bunch of properties. Each o
 
 Lastly, the `launch` method launches the generated page in a local web server. 
 
-```python
+```Python
 import modui
-
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 tokenizer = T5Tokenizer.from_pretrained("t5-small")
@@ -50,6 +49,19 @@ modui.Page(fn=translate, config=model.config).launch()
 
 ### More samples 🧪
 Here are some of the other generated UI screens showing different types of model inputs and outputs.
+
+``` Python
+import modui
+from diffusers import StableDiffusionOnnxPipeline
+from PIL import Image
+
+pipeline = StableDiffusionOnnxPipeline.from_pretrained("./stable_diffusion_onnx", provider="DmlExecutionProvider")
+
+def generate(prompt: str) -> Image:
+    return pipeline(prompt).images[0]
+
+modui.Page(generate, pipeline.scheduler.config).launch()
+```
 
 ![Text2Image screenshot](./images/Text2Image.jpg)
 
