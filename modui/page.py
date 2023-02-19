@@ -1,11 +1,12 @@
 import gradio as g
 import string
+from PIL import Image
 
 from typing import Callable, List, Any
 from inspect import isfunction, getmembers
 
 class Page():
-    known_gtypes = ["text", "number", "bool"]
+    known_gtypes = ['text', 'number', 'bool', 'image']
 
     def find_inputs_outputs(self, fn) -> List[str]:
         """
@@ -15,9 +16,10 @@ class Page():
             return fn.__annotations__
 
         def to_gtype(t) -> str:
-            if t is str: return "text"
-            if t is float or t is int: return "number"
-            if t is bool: return "bool"
+            if t is str: return 'text'
+            if t is float or t is int: return 'number'
+            if t is bool: return 'bool'
+            if t is Image: return 'image'
             return ""
 
         def to_gtypes(t) -> List[str]:
@@ -102,7 +104,7 @@ class Page():
 
         def is_basic_type(v):
             t = type(v)
-            return t is int or (t is float and v > 0.001) or t is bool or t is str
+            return t is int or (t is float and v > 0.0001) or t is bool or t is str
 
         controls = {}
         members = getmembers(config)
@@ -137,18 +139,22 @@ class Page():
             input = None
             input_type = self.inputs[0]
             if input_type == 'text':
-                input = g.Textbox(lines=20, elem_id=self.fn.__code__.co_varnames[0], label=make_label(self.fn.__code__.co_varnames[0]))
+                input = g.Textbox(lines=15, elem_id=self.fn.__code__.co_varnames[0], label=make_label(self.fn.__code__.co_varnames[0]))
             elif input_type == 'number':
                 input = g.Number(elem_id=self.fn.__code__.co_varnames[0], label=make_label(self.fn.__code__.co_varnames[0]))
+            elif input_type == 'image':
+                input = g.Image(elem_id=self.fn.__code__.co_varnames[0], label=make_label(self.fn.__code__.co_varnames[0]), type='pil')
 
             output = None
             output_type = self.outputs[0]
             if output_type == 'text':
-                output = g.Textbox(lines=20, elem_id=self.fn.__name__, label=make_label(self.fn.__name__))
+                output = g.Textbox(lines=15, elem_id=self.fn.__name__, label=make_label(self.fn.__name__))
             elif output_type == 'number':
                 output = g.Number(elem_id=self.fn.__name__, label=make_label(self.fn.__name__))
             elif output_type == 'bool':
                 output = g.Checkbox(elem_id=self.fn.__name__, label=make_label(self.fn.__name__))
+            elif output_type == 'image':
+                output = g.Image(elem_id=self.fn.__name__, label=make_label(self.fn.__name__), type='pil')
 
             return input, output
 
@@ -162,10 +168,10 @@ class Page():
                 return g.Checkbox(value=v, elem_id=k, label=make_label(k))
             return None
 
-        def get_dropdown_widget(k, v):
+        def get_textbox_widget(k, v):
             t = type(v)
             if t is str:
-                return g.Dropdown(choices=[v], value=v, elem_id=k, label=make_label(k), interactive=True)
+                return g.Textbox(max_lines=1, value=v, elem_id=k, label=make_label(k), interactive=True)
             return None
 
         widgets = []
@@ -183,11 +189,11 @@ class Page():
             with g.Row():
                 g.Markdown("## Model Auto UI 🚀")
             with g.Row():
-                with g.Column(scale=5):
+                with g.Column(scale=3):
                     input_widget, output_widget = get_input_output_widgets()
                     with g.Row():
                         with g.Column(scale=1, min_width=100):
-                            submit_button = g.Button(value='Submit')
+                            submit_button = g.Button(value='Submit', variant='primary')
                         with g.Column(scale=8):
                             g.Button(visible=False)
 
@@ -197,9 +203,9 @@ class Page():
                         widget = get_primary_widget(k, v)
                         if widget: add_widget(widget)
 
-                    # it's more visually pleasing to have all the dropdowns show up towards the bottom of the page
+                    # it's more visually pleasing to have all the text boxes show up towards the bottom of the page
                     for k, v in self.controls.items():
-                        widget = get_dropdown_widget(k, v)
+                        widget = get_textbox_widget(k, v)
                         if widget: add_widget(widget)
 
             submit_button.click(fn=self.fn, inputs=[input_widget], outputs=[output_widget])
