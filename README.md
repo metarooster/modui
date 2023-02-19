@@ -44,8 +44,12 @@ def translate(text: str) -> str:
 modui.Page(fn=translate, config=model.config).launch()
 ```
 
-3. This sample will launch a local web server serving the generated page on [http://localhost:7860](http://localhost:7860/). Setting the `share=True` parameter on the `launch()` call will temporarily host the URL in a public share, useful when the UI is launched from a remote machine e.g. when sharing out a UI to others or running it inside a Repl, etc. The following are some of the generated UI screens on the browser.
+3. This sample will launch a local web server serving the generated page on [http://localhost:7860](http://localhost:7860/). Setting the `share=True` parameter on the `launch()` call will temporarily host the URL in a public share, useful when the UI is launched from a remote machine e.g. when sharing out a UI to others or running it inside a Repl, etc. 
 
 ![T5 screenshot](./images/T5.jpg)
+
+### More samples 🧪
+Here are some of the other generated UI screens showing different types of model inputs and outputs.
+
 ![Text2Image screenshot](./images/Text2Image.jpg)
 
