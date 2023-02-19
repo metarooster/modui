@@ -36,7 +36,7 @@ pip install torch>=1.13.0+cu116 torchvision>=0.13.0+cu116 torchaudio>=0.13.0 --e
 ### Running the Model
 You'll need a script that looks like what in the `text2image.py` file as follow. On a mid-range NVIDIA RTX 2070, a single image currently takes 20 seconds to generate from a prompt. It'll take up to 10 mins on the CPU.
 
-```
+``` Python
 from diffusers import StableDiffusionOnnxPipeline
 pipe = StableDiffusionOnnxPipeline.from_pretrained("./stable_diffusion_onnx", provider="DmlExecutionProvider")
 prompt = "a photo of Elon Musk and Bill Gates fighting in a boxing match."
