@@ -47,7 +47,7 @@ modui.Page(fn=translate, config=model.config).launch()
 
 ![T5 screenshot](./images/T5.jpg)
 
-### More samples 🧪
+## More samples 🧪
 Here are some of the other generated UI screens showing different types of model inputs and outputs.
 
 ``` Python
