@@ -139,7 +139,7 @@ class Page():
             input = None
             input_type = self.inputs[0]
             if input_type == 'text':
-                input = g.Textbox(lines=15, elem_id=self.fn.__code__.co_varnames[0], label=make_label(self.fn.__code__.co_varnames[0]))
+                input = g.Textbox(lines=5, max_lines=10, elem_id=self.fn.__code__.co_varnames[0], label=make_label(self.fn.__code__.co_varnames[0]))
             elif input_type == 'number':
                 input = g.Number(elem_id=self.fn.__code__.co_varnames[0], label=make_label(self.fn.__code__.co_varnames[0]))
             elif input_type == 'image':
@@ -148,7 +148,7 @@ class Page():
             output = None
             output_type = self.outputs[0]
             if output_type == 'text':
-                output = g.Textbox(lines=15, elem_id=self.fn.__name__, label=make_label(self.fn.__name__))
+                output = g.Textbox(lines=5, max_lines=10, elem_id=self.fn.__name__, label=make_label(self.fn.__name__))
             elif output_type == 'number':
                 output = g.Number(elem_id=self.fn.__name__, label=make_label(self.fn.__name__))
             elif output_type == 'bool':
