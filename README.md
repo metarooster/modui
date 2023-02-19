@@ -46,6 +46,6 @@ modui.Page(fn=translate, config=model.config).launch()
 
 3. This sample will launch a local web server serving the generated page on [http://localhost:7860](http://localhost:7860/). Setting the `share=True` parameter on the `launch()` call will temporarily host the URL in a public share, useful when the UI is launched from a remote machine e.g. when sharing out a UI to others or running it inside a Repl, etc. The following are some of the generated UI screens on the browser.
 
-![T5 screenshot](./images/t5.jpg)
-![Text2Image screenshot](./images/text2image.jpg)
+![T5 screenshot](./images/T5.jpg)
+![Text2Image screenshot](./images/Text2Image.jpg)
 
