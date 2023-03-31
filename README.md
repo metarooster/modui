@@ -6,7 +6,7 @@ It can be used to locally test an ML model in Python, or to demo them to an inte
 
 This project is inspired by Nat Friedman's Replit Bounty [Playground for local models](https://replit.com/bounties/@natfriedman/openai-playground-fo). We'll try to stick with the feature set as envisioned by Nat, but may deviate when necessary.
 
-## Sample
+## Sample Usage
 
 **Prerequisite**: Requires Gradio 3.16 and Python 3.7 or above.
 
@@ -19,6 +19,8 @@ To launch a UI for "T5-small", one of the HuggingFace Transformer models
 ```bash
 pip install modui 
 ```
+> As of this writing, the library hasn't been published in PyPI. The above command won't work.
+> Run `pip install -e .` from the project's folder to issue an *editable* install from the library sources in the current directory for test case development.
 
 2. Run the code below as a Python script. Notice the first and the last line in the sample. Those are the two relevant lines, everything else in the middle is whatever code you're testing with. In this sample, it's the code necessary to run the "t5-small" model.
 
