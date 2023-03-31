@@ -19,8 +19,7 @@ To launch a UI for "T5-small", one of the HuggingFace Transformer models
 ```bash
 pip install modui 
 ```
-> As of this writing, the library hasn't been published in PyPI. The above command won't work.
-> Run `pip install -e .` from the project's folder to issue an *editable* install from the library sources in the current directory for test case development.
+> As of this writing, the library hasn't been published in PyPI. The above command won't work. Run `pip install -e .` from the project's folder to issue an *editable* install from the library sources in the current directory for test case development.
 
 2. Run the code below as a Python script. Notice the first and the last line in the sample. Those are the two relevant lines, everything else in the middle is whatever code you're testing with. In this sample, it's the code necessary to run the "t5-small" model.
 
